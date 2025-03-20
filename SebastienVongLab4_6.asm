@@ -1,6 +1,6 @@
-;Write a program with a loop and indexed addressing that exchanges every pair of values in an array
-;with an even number of elements. Therefore, item i will exchange with item i+1, and item i+2 will
-;exchange with item i+3, and so on.
+;Use a loop with indirect or indexed addressing to reverse the elements of an integer array in place.
+;Do not copy the elements to any other array. Use the SIZEOF, TYPE, and LENGTHOF operators to make
+;the program as flexible as possible if the array size and type should be changed in the future.
 
 .386
 .model flat,stdcall
@@ -8,21 +8,23 @@
 ExitProcess proto,dwExitCode:dword
 
 .data
-	myArray		BYTE	10h, 20h, 30h, 40h, 50h, 60h
+	myString		BYTE	"Chicken"
 
 
 
 .code
 main proc
-	mov		esi, OFFSET myArray
-	mov		ecx, SIZEOF myArray/2
+	mov		esi, OFFSET myString
+	mov		ecx, SIZEOF myString - 1
 
 L1:
-	mov al, [esi]
-	mov bl, [esi+1]
-	inc esi
-	inc esi
-
+	mov		al, [esi]				;move the [esi] letter of myString into al
+	mov		bl, [esi + ecx]			;move the letter at the end of myStringinto bl
+	mov		dl,	al					;stores al
+	mov		[esi], bl				;moves the last letter into first letter spot
+	mov		[esi+ecx], dl			;moves the first letter into last letter spot
+	inc		esi
+	dec ecx
 	loop L1
 
 
